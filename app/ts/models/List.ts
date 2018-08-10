@@ -1,4 +1,6 @@
-class List {
+import {NegotiationModel} from "./NegotiationModel";
+
+export class List {
     private _negotiations: NegotiationModel[] =[];
 
     add(negotiation: NegotiationModel):void{

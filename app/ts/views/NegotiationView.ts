@@ -1,4 +1,7 @@
-class NegotiationView  extends View<List> {
+import {View} from "./View";
+import {List} from "../models/List";
+
+export class NegotiationView  extends View<List> {
 
     template(itens:List) :string{
         return `

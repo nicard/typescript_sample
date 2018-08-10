@@ -6,26 +6,52 @@ export class NegotiationController {
     private _inputCount: JQuery;
     private _inputValue: JQuery;
     private _list = new List();
-    private _negociacoesView = new NegotiationView('#negociacoesView');
+    private _negotiationView = new NegotiationView('#negociacoesView', true);
     private _messageView = new MessageView('#messageView');
 
     constructor(){
         this._inputDate = $('#date');
         this._inputCount = $('#count');
         this._inputValue= $('#value');
-        this._negociacoesView.update(this._list);
+        this._negotiationView.update(this._list);
     }
 
     add(event: Event){
         event.preventDefault();
+        let date = new Date(this._inputDate.val().replace(/-/g,','));
+        if(!this.isWeekDay(date)){
+            this._messageView.update('Only negotiation in Weekdays.');
+            return;
+        }
+
         const negotiation = new NegotiationModel(
-            new Date(this._inputDate.val().replace(/-/g,',')),
+            date,
             parseInt(this._inputCount.val()),
             parseFloat(this._inputValue.val())
         )
 
         this._list.add(negotiation);
-        this._negociacoesView.update(this._list);
+        this._negotiationView.update(this._list);
         this._messageView.update('Negotiation added');
     }
+
+    private isWeekDay(date :Date): boolean{
+        if(date.getDay() == WeekDays.Sunday || date.getDay() == WeekDays.Saturday){
+            this._messageView.update('Only negotiation in Weekdays.');
+            return false;
+        }
+        return true;
+    }
+}
+
+enum WeekDays {
+    Sunday,
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday
+
+
 }

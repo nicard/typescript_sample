@@ -8,6 +8,6 @@ export class List {
     }
 
     toArray():NegotiationModel[]{
-        return [].concat(this._negotiations);
+        return ([] as NegotiationModel[]).concat(this._negotiations);
     }
 }

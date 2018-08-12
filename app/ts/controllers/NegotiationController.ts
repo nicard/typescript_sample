@@ -1,7 +1,7 @@
 import {MessageView, NegotiationView} from "../views/index";
 import {List, NegotiationModel} from "../models/index";
 import {domInject, throttle} from "../helpers/decorators/index";
-import {NegotiationParcel} from "../models/NegotiationParcel";
+import {NegotiationService} from "../services/index";
 
 
 export class NegotiationController {
@@ -15,6 +15,7 @@ export class NegotiationController {
     private _inputValue: JQuery;
 
     private _list = new List();
+    private _service = new NegotiationService();
     private _negotiationView = new NegotiationView('#negociacoesView', true);
     private _messageView = new MessageView('#messageView');
 
@@ -44,24 +45,16 @@ export class NegotiationController {
 
     @throttle()
     importData() {
-
-        function isOk(res: Response){
-            if(res.ok)
-                return res;
-            else
+        this._service
+            .getNegotiations(res => {
+                if(res.ok)
+                    return res;
                 throw new Error(res.statusText);
-        }
-
-        fetch('http://localhost:8080/dados')
-            .then(res => isOk(res))
-            .then(res => res.json())
-            .then((data: NegotiationParcel[]) => {
-                data
-                    .map(d => new NegotiationModel(new Date(), d.vezes, d.montante))
-                    .forEach(negotiation => this._list.add(negotiation))
-                this._negotiationView.update(this._list);
             })
-            .catch(error => console.log(error.message));
+            .then(negotiations => {
+                negotiations.forEach( n => this._list.add(n))
+                this._negotiationView.update(this._list);
+            });
 
 
     }
@@ -85,6 +78,4 @@ enum WeekDays {
     Thursday,
     Friday,
     Saturday
-
-
 }

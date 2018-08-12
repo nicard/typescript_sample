@@ -1,18 +1,22 @@
 import {MessageView, NegotiationView} from "../views/index";
 import {List, NegotiationModel} from "../models/index";
+import {domInject} from "../helpers/decorators/domInject";
 
 export class NegotiationController {
+    @domInject('#date')
     private _inputDate: JQuery;
+
+    @domInject('#count')
     private _inputCount: JQuery;
+
+    @domInject('#value')
     private _inputValue: JQuery;
+
     private _list = new List();
     private _negotiationView = new NegotiationView('#negociacoesView', true);
     private _messageView = new MessageView('#messageView');
 
     constructor(){
-        this._inputDate = $('#date');
-        this._inputCount = $('#count');
-        this._inputValue= $('#value');
         this._negotiationView.update(this._list);
     }
 

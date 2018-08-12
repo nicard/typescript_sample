@@ -1,6 +1,8 @@
 import {MessageView, NegotiationView} from "../views/index";
 import {List, NegotiationModel} from "../models/index";
-import {domInject} from "../helpers/decorators/domInject";
+import {domInject, throttle} from "../helpers/decorators/index";
+import {NegotiationParcel} from "../models/NegotiationParcel";
+
 
 export class NegotiationController {
     @domInject('#date')
@@ -19,6 +21,7 @@ export class NegotiationController {
     constructor(){
         this._negotiationView.update(this._list);
     }
+
 
     add(event: Event){
         event.preventDefault();
@@ -39,6 +42,30 @@ export class NegotiationController {
         this._messageView.update('Negotiation added');
     }
 
+    @throttle()
+    importData() {
+
+        function isOk(res: Response){
+            if(res.ok)
+                return res;
+            else
+                throw new Error(res.statusText);
+        }
+
+        fetch('http://localhost:8080/dados')
+            .then(res => isOk(res))
+            .then(res => res.json())
+            .then((data: NegotiationParcel[]) => {
+                data
+                    .map(d => new NegotiationModel(new Date(), d.vezes, d.montante))
+                    .forEach(negotiation => this._list.add(negotiation))
+                this._negotiationView.update(this._list);
+            })
+            .catch(error => console.log(error.message));
+
+
+    }
+
     private isWeekDay(date :Date): boolean{
         if(date.getDay() == WeekDays.Sunday || date.getDay() == WeekDays.Saturday){
             this._messageView.update('Only negotiation in Weekdays.');
@@ -46,6 +73,8 @@ export class NegotiationController {
         }
         return true;
     }
+
+
 }
 
 enum WeekDays {

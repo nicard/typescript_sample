@@ -1,7 +1,7 @@
 import {NegotiationModel} from "./NegotiationModel";
-import {Logged} from "./Logged";
+import {WorkableObject} from "./WorkableObject";
 
-export class List implements Logged{
+export class List implements WorkableObject<NegotiationModel>{
     private _negotiations: NegotiationModel[] =[];
 
     add(negotiation: NegotiationModel):void{
@@ -15,5 +15,9 @@ export class List implements Logged{
     toLogString(): void{
         console.log('Show Negotiations List');
         console.log(JSON.stringify(this._negotiations));
+    }
+
+    isEqual(object: NegotiationModel): boolean {
+        return JSON.stringify(this._negotiations) == JSON.stringify(object._negotiations);
     }
 }

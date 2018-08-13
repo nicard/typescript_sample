@@ -1,6 +1,6 @@
-import {Logged} from "./Logged";
+import {WorkableObject} from "./WorkableObject";
 
-export class NegotiationModel implements Logged {
+export class NegotiationModel implements WorkableObject<NegotiationModel> {
 
     constructor(readonly date: Date, readonly count: number, readonly value: number){
     }
@@ -16,5 +16,11 @@ export class NegotiationModel implements Logged {
         Value: ${this.value}
         Volume: ${this.volume}
         `);
+    }
+
+    isEqual(object: NegotiationModel): boolean {
+        return this.date.getDate() == object.date.getDate()
+            && this.date.getMonth() == object.date.getMonth()
+            && this.date.getFullYear() == object.date.getFullYear();
     }
 }

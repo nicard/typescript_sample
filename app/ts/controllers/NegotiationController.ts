@@ -53,8 +53,13 @@ export class NegotiationController {
                     return res;
                 throw new Error(res.statusText);
             })
-            .then(negotiations => {
-                negotiations.forEach( n => this._list.add(n))
+            .then(negotiationsImported => {
+                const negotiations = this._list.toArray();
+                negotiationsImported
+                    .filter(negotiation =>
+                        !negotiations.some(current =>
+                            negotiation.isEqual(current)))
+                    .forEach( n => this._list.add(n))
                 this._negotiationView.update(this._list);
             });
 

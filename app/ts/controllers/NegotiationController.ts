@@ -46,23 +46,25 @@ export class NegotiationController {
     }
 
     @throttle()
-    importData() {
-        this._service
-            .getNegotiations(res => {
-                if(res.ok)
-                    return res;
-                throw new Error(res.statusText);
-            })
-            .then(negotiationsImported => {
-                const negotiations = this._list.toArray();
-                negotiationsImported
-                    .filter(negotiation =>
-                        !negotiations.some(current =>
-                            negotiation.isEqual(current)))
-                    .forEach( n => this._list.add(n))
-                this._negotiationView.update(this._list);
-            });
+    async importData() {
+        try{
+            const negotiationsImported = await this._service
+                .getNegotiations(res => {
+                    if(res.ok)
+                        return res;
+                    throw new Error(res.statusText);
+                });
 
+            const negotiations = this._list.toArray();
+            negotiationsImported
+                .filter(negotiation =>
+                    !negotiations.some(current =>
+                        negotiation.isEqual(current)))
+                .forEach( n => this._list.add(n))
+            this._negotiationView.update(this._list);
+        } catch (error) {
+            this._messageView.update(error.message);
+        }
 
     }
 

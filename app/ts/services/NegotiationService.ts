@@ -11,7 +11,10 @@ export class NegotiationService {
                 data
                     .map(d => new NegotiationModel(new Date(), d.vezes, d.montante))
             )
-            .catch(error => console.log(error.message));
+            .catch(error => {
+                console.log(error.message);
+                throw new Error("Unable to connect to server ");
+            });
     }
 
 }

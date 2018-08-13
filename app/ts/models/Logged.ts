@@ -1,3 +1,3 @@
-export abstract class Logged {
-    abstract toLogString(): void;
+export interface Logged {
+    toLogString(): void;
 }

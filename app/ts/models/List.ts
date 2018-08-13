@@ -18,6 +18,6 @@ export class List implements WorkableObject<NegotiationModel>{
     }
 
     isEqual(object: NegotiationModel): boolean {
-        return JSON.stringify(this._negotiations) == JSON.stringify(object._negotiations);
+        return JSON.stringify(this._negotiations) == JSON.stringify(object);
     }
 }

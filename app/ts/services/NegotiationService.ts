@@ -4,7 +4,7 @@ import {NegotiationParcel} from "../models/NegotiationParcel";
 export class NegotiationService {
 
     getNegotiations(hanlder: HandlerFunction): Promise<NegotiationModel[]>{
-        return fetch('http://localhost:8080/dados')
+        return fetch('http://localhost:3000/dados')
             .then(res => hanlder(res))
             .then(res => res.json())
             .then((data: NegotiationParcel[]) =>

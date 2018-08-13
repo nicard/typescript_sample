@@ -2,6 +2,7 @@ import {MessageView, NegotiationView} from "../views/index";
 import {List, NegotiationModel} from "../models/index";
 import {domInject, throttle} from "../helpers/decorators/index";
 import {NegotiationService} from "../services/index";
+import {log} from "../helpers/Utils";
 
 
 export class NegotiationController {
@@ -37,8 +38,9 @@ export class NegotiationController {
             parseInt(this._inputCount.val()),
             parseFloat(this._inputValue.val())
         )
-
         this._list.add(negotiation);
+        log(negotiation, this._list);
+
         this._negotiationView.update(this._list);
         this._messageView.update('Negotiation added');
     }
